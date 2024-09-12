@@ -25,7 +25,7 @@ def conf():
     parser.add_argument("--parallel_worker_num", type=int, default=4)
     parser.add_argument("--doc_chucks", type=int, default=-1)
     parser.add_argument("--llamaindex_root", type=str, default="./storage")
-    parser.add_argument("--research_pdf_root", type=str, default="~/Documents/OneDrive/Programming/Algorithm/01_ML/01_research/03_cv/")
+    parser.add_argument("--research_pdf_root", type=str, default="~/Documents/OneDrive/Programming/Algorithm/01_ML/01_research/")
     parser.add_argument("--research_excel_path", type=str, default="~/Documents/OneDrive/PhD/Dialog-system_research_summary_by_orlando.xlsx")
     parser.add_argument("--annotation_pdf_root", type=str, default="~/Library/Mobile Documents/iCloud~QReader~MarginStudy/Documents/ML/Papers/")
     parser.add_argument("--saved_query_file", type=str, default="query_answers_for_opaper_rag.json")
