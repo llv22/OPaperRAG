@@ -2,6 +2,8 @@
 .vscode/
 0*_*/
 misc/
+storage/
 
 # macOS
 .DS_store
+*.json

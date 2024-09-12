@@ -5,7 +5,7 @@ import argparse
 
 def conf():
     parser = argparse.ArgumentParser(description="Renew index of PDF files")
-    parser.add_argument("-rp", "--root_path", help="Root folder of PDF files", default="/Users/llv23/Documents/OneDrive/Programming/Algorithm/01_ML/01_research")
+    parser.add_argument("-rp", "--root_path", help="Root folder of PDF files", default="~/Documents/OneDrive/Programming/Algorithm/01_ML/01_research")
     return parser.parse_args()
 
 if __name__ == "__main__":
