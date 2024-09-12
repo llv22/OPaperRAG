@@ -1,0 +1,7 @@
+# disable vscode
+.vscode/
+0*_*/
+misc/
+
+# macOS
+.DS_store
