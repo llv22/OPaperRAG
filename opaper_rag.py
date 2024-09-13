@@ -44,6 +44,10 @@ def annotation_files(annotation_pdf_root):
 def create_index(nodes):
     return VectorStoreIndex(nodes, include_embeddings=True)
 
+def write_to_file(saved_query_file, query_answers):
+    with open(saved_query_file, "aw") as f:
+        json.dump(query_answers, f, indent=1)
+
 if __name__ == "__main__":
     args = conf()
     research_pdf_root, research_excel_path, annotation_pdf_root, parallel_worker_num, doc_chucks, llamaindex_root, if_recreate_index, saved_query_file = args.research_pdf_root, args.research_excel_path, args.annotation_pdf_root, args.parallel_worker_num, args.doc_chucks, args.llamaindex_root, args.recreate_index, args.saved_query_file
@@ -89,7 +93,6 @@ if __name__ == "__main__":
         index = load_index_from_storage(StorageContext.from_defaults(persist_dir=llamaindex_root)) 
         print(f"load index time: {time() - start: .2f} seconds")
     
-    query_start = time()
     query_engine = index.as_query_engine(streaming=True, similarity_top_k=2)
     llm = OpenAI(model="gpt-4",temperature=0)
     query_engine = index.as_query_engine(
@@ -98,10 +101,11 @@ if __name__ == "__main__":
         llm=llm
     )
     
-    query = input("please Enter Your Query for Papers: ")
+    query = input("\n\nplease Enter Your Query for Papers: ")
     query_answers = []
     run_num = 1
     while query is not None and len(query.strip()) > 0 and query.upper() != "EXIT":
+        query_start = time()
         response = query_engine.query(query)
         v = "".join(response.response_gen)
         query_answers.append({
@@ -109,10 +113,14 @@ if __name__ == "__main__":
             "Query": query,
             "Result": v,
         })
-        print(f"Run {run_num}[{time() - query_start: .2f} seconds]: \n\tquery: {query}\n\tresult: {v}")
+        print(f"Run {run_num}[{time() - query_start: .2f} seconds]: \n\tresult: {v}")
         run_num += 1
+        write_to_file(saved_query_file, query_answers)
+        #see: clear the query
+        query = input("\nplease Enter Your Query for Papers: ")
     if len(query_answers) == 0:
         query = "List papers relevant with SAM and their file path and annotation path if having"
+        query_start = time()
         response = query_engine.query(query)
         v = "".join(response.response_gen)
         query_answers.append({
@@ -120,8 +128,6 @@ if __name__ == "__main__":
             "Query": query,
             "Result": v,
         })
-        print(f"Run {run_num}[{time() - query_start: .2f} seconds]: \n\tquery: {query}\n\tresult: {v}")
+        print(f"Run {run_num}[{time() - query_start: .2f} seconds]: \n\tresult: {v}")
+        write_to_file(saved_query_file, query_answers)
         run_num += 1
-
-    with open(saved_query_file, "w") as f:
-        json.dump(query_answers, f, indent=1)
