@@ -45,7 +45,7 @@ def create_index(nodes):
     return VectorStoreIndex(nodes, include_embeddings=True)
 
 def write_to_file(saved_query_file, query_answers):
-    with open(saved_query_file, "aw") as f:
+    with open(saved_query_file, "w") as f:
         json.dump(query_answers, f, indent=1)
 
 if __name__ == "__main__":
